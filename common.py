@@ -1,4 +1,4 @@
-BOT_TOKEN                       = "MTAwNTk2MTM5Njg2Mjg1MzIxMg.Gp9Dzu.dEk1zAqD1fUH6YN2z5gkKE7X-z3eWlDbVJLyl8"
+BOT_TOKEN                       = TOKEN HERE!!
 SERVER_ID                       = 1151212134471045253
 DEFAULT_CHANNEL_ID              = 1151217161247932437
 ADMIN_ROLE                      = "Bureau"
