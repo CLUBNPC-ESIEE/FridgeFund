@@ -48,7 +48,7 @@ def buy(user_id, item_name, quantity):
     #computing the transaction
     common.DB.update_balance_by_id(-total_price, user_id) #Wildric NOTE: I don't like id being the second argument
     common.DB.update_quantity_by_name(item_quantity - quantity, item_name)
-    newBalance = balance - total_price
+    newBalance = common.DB.get_balance_by_id(user_id)
     return f"The transaction was successful, you are left with {newBalance} NPCC. Enjoy your snack :)"
 
 

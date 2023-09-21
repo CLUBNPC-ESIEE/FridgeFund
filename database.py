@@ -36,13 +36,14 @@ class SimpleSQLiteDatabase:
             self.connection.execute(insert_query, (id_user, name,realname, balance))
 
     def update_balance_by_id(self, ajout, id_user):
+        new_balance  = max(0, round(self.get_balance_by_id(id_user) + ajout, 3))
         update_query = '''
             UPDATE users
-            SET balance = balance + ?
+            SET balance =  ?
             WHERE id = ?
         '''
         with self.connection:
-            self.connection.execute(update_query, (ajout, id_user))
+            self.connection.execute(update_query, (new_balance, id_user))
 
     def get_user_by_id(self, id_user):
         select_query = '''
