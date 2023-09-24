@@ -2,6 +2,8 @@ import discord
 import bot
 import common
 
+n_coin="ff"
+
 def create_embed(title, description):
     color=discord.Color(0xb408ab) #couleur msg embed
     return discord.Embed(title=title, description=description, color=color)
@@ -49,24 +51,25 @@ def buy(user_id, item_name, quantity):
     common.DB.update_balance_by_id(-total_price, user_id) #Wildric NOTE: I don't like id being the second argument
     common.DB.update_quantity_by_name(item_quantity - quantity, item_name)
     newBalance = common.DB.get_balance_by_id(user_id)
-    return f"The transaction was successful, you are left with {newBalance} NPCC. Enjoy your snack :)"
+    return f"The transaction was successful, you are left with {newBalance} "+n_coin+". Enjoy your snack :)"
 
 
 def get_balance(id_author, id):
     s = ""
     if id == id_author:
-        s = "You have " + str(common.DB.get_balance_by_id(id_author)) + " NPCC"
+        s = "You have " + str(common.DB.get_balance_by_id(id_author)) + " "+n_coin
     else: 
-        s = str(common.DB.get_user_name_by_id(id)) + " has " + str(common.DB.get_balance_by_id(id)) + " NPCC"
+        s = str(common.DB.get_user_name_by_id(id)) + " has " + str(common.DB.get_balance_by_id(id)) + " "+n_coin
     return s
 
 #-------------------------------------------------
 #Cmds in order, "z" prefix is reserved to cmds accessible only to administrators, such prefix is used for discord command sorting which is alphabetical
 #-hello
 #-info
-#-list
+#-ff
 #-items
-#-item 
+#-item
+#-user
 #-wallet 
 #-zwallet 
 #-zbuy  
@@ -97,7 +100,7 @@ async def infoCmd(inter : discord.Interaction):
 
 
 #TODO::Find a way to format this; tried space counting formatting but won't work since letters aren't same length
-@bot.tree.command(name="list", description = "Lists all users in the database",  guild=discord.Object(id=common.SERVER_ID))
+@bot.tree.command(name="ff", description = "Lists all users in the database",  guild=discord.Object(id=common.SERVER_ID))
 async def listCmd(inter : discord.Interaction):
     if not check_channels(inter, [common.DEFAULT_CHANNEL_ID]) or not check_roles(inter, []):
         return await inter.response.send_message(embed=create_embed(None, common.gInvalidCmdMsg))
@@ -109,10 +112,10 @@ async def listCmd(inter : discord.Interaction):
     else:
         title = "Ranking of FridgeFunders"
         for user in data:
-            msg += "```"
+            msg = "```"
             msg += "Nickname: " + user[1] + " ‎" * 4
             msg += "RealName: " + user[2] + " ‎" * 4
-            msg += "Balance: " +  str(user[3]) + "NPCC```"
+            msg += "Balance: " +  str(user[3]) +n_coin+"```"
     await inter.response.send_message(embed=create_embed(title, msg))
 
 
@@ -129,10 +132,11 @@ async def itemsCmd(inter : discord.Interaction):
     else:
         title = "Available Snacks"
         for snack in data:
-            name, quantity, price = snack
-            msg += f"{name} | Quantity: {quantity}, Price: {price} NPCC\n"
+            msg = "```"
+            msg += snack[0] + " ‎" * 4
+            msg += "Quantity: " + str(snack[1]) + " ‎" * 4
+            msg += "Price: " +  str(snack[2]) +n_coin+"```"
     await inter.response.send_message(embed=create_embed(title, msg))
-
 
 
 
@@ -145,11 +149,11 @@ async def itemCmd(inter : discord.Interaction, item: str):
     msg  = "That snack isn't available, try ```/items``` to see all available snacks"
     if common.DB.item_exist_by_name(item):
         name, quantity, price = common.DB.get_item_by_name(item)
-        msg = f"Quantity: {quantity}, Price: {price} NPCC"
+        msg = "```"
+        msg += name + " ‎" * 4
+        msg += "Quantity: " + str(quantity) + " ‎" * 4
+        msg += "Price: " +  str(price) +n_coin+"```"
     await inter.response.send_message(embed=create_embed(item, msg))
-
-
-
 
 @bot.tree.command(name="wallet", description = "Responds with details about your wallet",  guild=discord.Object(id=common.SERVER_ID))
 async def walletCmd(inter : discord.Interaction):
@@ -245,7 +249,10 @@ async def zitemCmd(inter : discord.Interaction, item : str, price : float = -1.0
     #No update getting just info
     if price == -1 and quantity == -1:
         name, quantity, price = common.DB.get_item_by_name(item)
-        msg = f"Quantity: {quantity}, Price: {price} NPCC"
+        msg = "```"
+        msg += name + " ‎" * 4
+        msg += "Quantity: " + str(quantity) + " ‎" * 4
+        msg += "Price: " +  str(price) +n_coin+"```"
         return await inter.response.send_message(embed=create_embed(item, msg))
     #updating the item
     if price != -1:
