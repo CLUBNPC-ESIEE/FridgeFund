@@ -1,10 +1,10 @@
-BOT_TOKEN                       = TOKEN HERE!!
-SERVER_ID                       = 1151212134471045253
-DEFAULT_CHANNEL_ID              = 1151217161247932437
+BOT_TOKEN                       = "METTRE SON TOKEN ICI"
+SERVER_ID                       = 0
+DEFAULT_CHANNEL_ID              = 0
 ADMIN_ROLE                      = "Bureau"
 
 
 
 #DONT EDIT THE FOLLOWING!
-gInvalidCmdMsg = "Hmm, weird bug; if you see this msg contact the dev"
+gInvalidCmdMsg = "Hmm, weird bug; if you see this msg contact the developper"
 gDB            = None #global database
