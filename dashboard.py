@@ -17,7 +17,7 @@ app = dash.Dash(__name__, external_stylesheets=['https://stackpath.bootstrapcdn.
     '2022-2023': {"date1": datetime.strptime("2022-09-01","%Y-%m-%d"),"date2":datetime.strptime("2023-08-30","%Y-%m-%d")}
 }"""
 
-annees_sco={}
+annees_sco={'2023-2024': {"date1": datetime.strptime("2023-09-01","%Y-%m-%d"),"date2":datetime.strptime("2024-08-30","%Y-%m-%d")}}
 
 def get_annees_sco():
     bdd = SimpleSQLiteDatabase('my_database.db')
@@ -35,7 +35,6 @@ def get_annees_sco():
             annees_sco[n] = {"date1": datetime.strptime(f"{y}-09-01","%Y-%m-%d"),"date2":datetime.strptime(f"{sn}-08-30","%Y-%m-%d")}
     bdd.close_connection()
     return annees_sco
-
 
 first_page_content = html.Div([])
 second_page_content = html.Div([])
@@ -66,7 +65,7 @@ first_page_content = html.Div([
     dcc.Dropdown(
         id='dropdown-annees-sco',
         options=[opt for opt in get_annees_sco().keys()],
-        value=list(annees_sco.keys())[0],
+        value=list(get_annees_sco().keys())[0],
         clearable=False,
         style={'width': '33%','color': 'green'}
     ),
